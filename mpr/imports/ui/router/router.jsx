@@ -10,10 +10,10 @@ import {RegisterPageContainer} from "/imports/ui/pages/register/register.jsx";
 import {ForgotPasswordPageContainer} from "/imports/ui/pages/forgot_password/forgot_password.jsx";
 import {ResetPasswordPageContainer} from "/imports/ui/pages/reset_password/reset_password.jsx";
 import {HomePrivatePageContainer} from "/imports/ui/pages/home_private/home_private.jsx";
-import {CustomersPageContainer} from "/imports/ui/pages/customers/customers.jsx";
-import {CustomersInsertPageContainer} from "/imports/ui/pages/customers/insert/insert.jsx";
-import {CustomersDetailsPageContainer} from "/imports/ui/pages/customers/details/details.jsx";
-import {CustomersEditPageContainer} from "/imports/ui/pages/customers/edit/edit.jsx";
+import {ClassroomsPageContainer} from "/imports/ui/pages/classrooms/classrooms.jsx";
+import {ClassroomsInsertPageContainer} from "/imports/ui/pages/classrooms/insert/insert.jsx";
+import {ClassroomsDetailsPageContainer} from "/imports/ui/pages/classrooms/details/details.jsx";
+import {ClassroomsEditPageContainer} from "/imports/ui/pages/classrooms/edit/edit.jsx";
 import {InvoicesPageContainer} from "/imports/ui/pages/invoices/invoices.jsx";
 import {InvoicesInsertPageContainer} from "/imports/ui/pages/invoices/insert/insert.jsx";
 import {InvoicesDetailsPageContainer} from "/imports/ui/pages/invoices/details/details.jsx";
@@ -79,10 +79,10 @@ const publicRouteNames = [
 
 const privateRouteNames = [
 	"home_private",
-	"customers",
-	"customers.insert",
-	"customers.details",
-	"customers.edit",
+	"classrooms",
+	"classrooms.insert",
+	"classrooms.details",
+	"classrooms.edit",
 	"invoices",
 	"invoices.insert",
 	"invoices.details",
@@ -404,8 +404,8 @@ privateRoutes.route("/home_private", {
 	]
 });
 
-privateRoutes.route("/customers", {
-    name: "customers",
+privateRoutes.route("/classrooms", {
+    name: "classrooms",
 
     title: "",
 
@@ -417,7 +417,7 @@ privateRoutes.route("/customers", {
     action: function(routeParams, routeQuery) {
     	reactMount(LayoutContainer, {
 			content: (
-				<CustomersPageContainer routeParams={routeParams} />
+				<ClassroomsPageContainer routeParams={routeParams} />
 			)
 		});
 
@@ -429,8 +429,8 @@ privateRoutes.route("/customers", {
 	]
 });
 
-privateRoutes.route("/customers/insert", {
-    name: "customers.insert",
+privateRoutes.route("/classrooms/insert", {
+    name: "classrooms.insert",
 
     title: "",
 
@@ -442,7 +442,7 @@ privateRoutes.route("/customers/insert", {
     action: function(routeParams, routeQuery) {
     	reactMount(LayoutContainer, {
 			content: (
-				<CustomersInsertPageContainer routeParams={routeParams} />
+				<ClassroomsInsertPageContainer routeParams={routeParams} />
 			)
 		});
 
@@ -454,8 +454,8 @@ privateRoutes.route("/customers/insert", {
 	]
 });
 
-privateRoutes.route("/customers/details/:customerId", {
-    name: "customers.details",
+privateRoutes.route("/classrooms/details/:classroomId", {
+    name: "classrooms.details",
 
     title: "",
 
@@ -467,7 +467,7 @@ privateRoutes.route("/customers/details/:customerId", {
     action: function(routeParams, routeQuery) {
     	reactMount(LayoutContainer, {
 			content: (
-				<CustomersDetailsPageContainer routeParams={routeParams} />
+				<ClassroomsDetailsPageContainer routeParams={routeParams} />
 			)
 		});
 
@@ -479,8 +479,8 @@ privateRoutes.route("/customers/details/:customerId", {
 	]
 });
 
-privateRoutes.route("/customers/edit/:customerId", {
-    name: "customers.edit",
+privateRoutes.route("/classrooms/edit/:classroomId", {
+    name: "classrooms.edit",
 
     title: "",
 
@@ -492,7 +492,7 @@ privateRoutes.route("/customers/edit/:customerId", {
     action: function(routeParams, routeQuery) {
     	reactMount(LayoutContainer, {
 			content: (
-				<CustomersEditPageContainer routeParams={routeParams} />
+				<ClassroomsEditPageContainer routeParams={routeParams} />
 			)
 		});
 

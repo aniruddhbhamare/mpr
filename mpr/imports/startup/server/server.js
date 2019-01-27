@@ -1,20 +1,20 @@
 import {Users} from "meteor-user-roles";
-import "/imports/api/collections/both/customers.js";
 import "/imports/api/collections/both/invoices.js";
+import "/imports/api/collections/both/classrooms.js";
 import "/imports/api/collections/both/invoice_items.js";
 
 import "/imports/api/collections/both/joins/joins.js";
 
-import "/imports/api/collections/server/rules/customers.js";
 import "/imports/api/collections/server/rules/invoices.js";
+import "/imports/api/collections/server/rules/classrooms.js";
 import "/imports/api/collections/server/rules/invoice_items.js";
 
-import "/imports/api/collections/server/publications/customers.js";
 import "/imports/api/collections/server/publications/invoices.js";
+import "/imports/api/collections/server/publications/classrooms.js";
 import "/imports/api/collections/server/publications/invoice_items.js";
 
-import "/imports/api/methods/customers.js";
 import "/imports/api/methods/invoices.js";
+import "/imports/api/methods/classrooms.js";
 import "/imports/api/methods/invoice_items.js";
 
 import "/imports/api/server_routes/router.js";
@@ -37,7 +37,7 @@ Meteor.startup(function() {
 
 	// Email templates config
 	if(Accounts.emailTemplates) {
-		Accounts.emailTemplates.siteName = "Montessori Progress Report v0.0.1";
+		Accounts.emailTemplates.siteName = "MPR v0.0.1";
 		Accounts.emailTemplates.from = "";
 	}
 

@@ -5,14 +5,13 @@ import {pathFor, menuItemClass} from "/imports/modules/client/router_utils";
 import {Loading} from "/imports/ui/pages/loading/loading.jsx";
 import {mergeObjects} from "/imports/modules/both/object_utils";
 import {Classrooms} from "/imports/api/collections/both/classrooms.js";
-import {Invoices} from "/imports/api/collections/both/invoices.js";
 import * as formUtils from "/imports/modules/client/form_utils";
 import * as objectUtils from "/imports/modules/both/object_utils";
 import * as dateUtils from "/imports/modules/both/date_utils";
 import * as stringUtils from "/imports/modules/both/string_utils";
 
 
-export class InvoicesEditPage extends Component {
+export class ClassroomsEditPage extends Component {
 	constructor () {
 		super();
 		
@@ -51,7 +50,7 @@ export class InvoicesEditPage extends Component {
 							<div className="col-md-12">
 							</div>
 						</div>
-						<InvoicesEditPageEditForm data={this.props.data} routeParams={this.props.routeParams} />
+						<ClassroomsEditPageEditForm data={this.props.data} routeParams={this.props.routeParams} />
 					</div>
 				</div>
 			);
@@ -59,7 +58,7 @@ export class InvoicesEditPage extends Component {
 	}
 }
 
-export const InvoicesEditPageContainer = withTracker(function(props) {
+export const ClassroomsEditPageContainer = withTracker(function(props) {
 
 
 
@@ -67,8 +66,7 @@ export const InvoicesEditPageContainer = withTracker(function(props) {
 		
 
 		let subs = [
-			Meteor.subscribe("classroom_list"),
-			Meteor.subscribe("invoice_details", props.routeParams.invoiceId)
+			Meteor.subscribe("classroom_details", props.routeParams.classroomId)
 		];
 		let ready = true;
 		_.each(subs, function(sub) {
@@ -85,8 +83,7 @@ export const InvoicesEditPageContainer = withTracker(function(props) {
 
 		data = {
 
-				classroom_list: Classrooms.find({}, {sort:{name:1}}).fetch(),
-				invoice_details: Invoices.findOne({_id:props.routeParams.invoiceId}, {})
+				classroom_details: Classrooms.findOne({_id:props.routeParams.classroomId}, {})
 			};
 		
 
@@ -94,15 +91,15 @@ export const InvoicesEditPageContainer = withTracker(function(props) {
 	}
 	return { data: data };
 
-})(InvoicesEditPage);
+})(ClassroomsEditPage);
 
-export class InvoicesEditPageEditForm extends Component {
+export class ClassroomsEditPageEditForm extends Component {
 	constructor () {
 		super();
 
 		this.state = {
-			invoicesEditPageEditFormErrorMessage: "",
-			invoicesEditPageEditFormInfoMessage: ""
+			classroomsEditPageEditFormErrorMessage: "",
+			classroomsEditPageEditFormInfoMessage: ""
 		};
 
 		this.renderErrorMessage = this.renderErrorMessage.bind(this);
@@ -133,7 +130,7 @@ export class InvoicesEditPageEditForm extends Component {
 	renderErrorMessage() {
 		return(
 			<div className="alert alert-warning">
-				{this.state.invoicesEditPageEditFormErrorMessage}
+				{this.state.classroomsEditPageEditFormErrorMessage}
 			</div>
 		);
 	}
@@ -141,41 +138,41 @@ export class InvoicesEditPageEditForm extends Component {
 	renderInfoMessage() {
 		return(
 			<div className="alert alert-success">
-				{this.state.invoicesEditPageEditFormInfoMessage}
+				{this.state.classroomsEditPageEditFormInfoMessage}
 			</div>
 		);
 	}
 
 	onSubmit(e) {
 		e.preventDefault();
-		this.setState({ invoicesEditPageEditFormInfoMessage: "" });
-		this.setState({ invoicesEditPageEditFormErrorMessage: "" });
+		this.setState({ classroomsEditPageEditFormInfoMessage: "" });
+		this.setState({ classroomsEditPageEditFormErrorMessage: "" });
 
 		var self = this;
 		var $form = $(e.target);
 
 		function submitAction(result, msg) {
-			var invoicesEditPageEditFormMode = "update";
-			if(!$("#invoices-edit-page-edit-form").find("#form-cancel-button").length) {
-				switch(invoicesEditPageEditFormMode) {
+			var classroomsEditPageEditFormMode = "update";
+			if(!$("#classrooms-edit-page-edit-form").find("#form-cancel-button").length) {
+				switch(classroomsEditPageEditFormMode) {
 					case "insert": {
 						$form[0].reset();
 					}; break;
 
 					case "update": {
 						var message = msg || "Saved.";
-						self.setState({ invoicesEditPageEditFormInfoMessage: message });
+						self.setState({ classroomsEditPageEditFormInfoMessage: message });
 					}; break;
 				}
 			}
 
-			FlowRouter.go("invoices", objectUtils.mergeObjects(FlowRouter.current().params, {}));
+			FlowRouter.go("classrooms", objectUtils.mergeObjects(FlowRouter.current().params, {}));
 		}
 
 		function errorAction(msg) {
 			msg = msg || "";
 			var message = msg.message || msg || "Error.";
-			self.setState({ invoicesEditPageEditFormErrorMessage: message });
+			self.setState({ classroomsEditPageEditFormErrorMessage: message });
 		}
 
 		formUtils.validateForm(
@@ -189,7 +186,7 @@ export class InvoicesEditPageEditForm extends Component {
 			function(values) {
 				
 
-				Meteor.call("invoicesUpdate", self.props.data.invoice_details._id, values, function(e, r) { if(e) errorAction(e); else submitAction(r); });
+				Meteor.call("classroomsUpdate", self.props.data.classroom_details._id, values, function(e, r) { if(e) errorAction(e); else submitAction(r); });
 			}
 		);
 
@@ -201,7 +198,7 @@ export class InvoicesEditPageEditForm extends Component {
 		self = this;
 		
 
-		FlowRouter.go("invoices", objectUtils.mergeObjects(FlowRouter.current().params, {}));
+		FlowRouter.go("classrooms", objectUtils.mergeObjects(FlowRouter.current().params, {}));
 	}
 
 	onClose(e) {
@@ -225,50 +222,51 @@ export class InvoicesEditPageEditForm extends Component {
 	render() {
 		let self = this;
 		return (
-			<div id="invoices-edit-page-edit-form" className="">
+			<div id="classrooms-edit-page-edit-form" className="">
 				<h2 id="component-title">
 					<span id="component-title-icon" className="">
 					</span>
-					Edit invoice
+					Edit classroom
 				</h2>
 				<form role="form" onSubmit={this.onSubmit}>
-					{this.state.invoicesEditPageEditFormErrorMessage ? this.renderErrorMessage() : null}
-					{this.state.invoicesEditPageEditFormInfoMessage ? this.renderInfoMessage() : null}
-								<div className="form-group  field-invoice-number">
-									<label htmlFor="invoiceNumber">
-										Invoice number
+					{this.state.classroomsEditPageEditFormErrorMessage ? this.renderErrorMessage() : null}
+					{this.state.classroomsEditPageEditFormInfoMessage ? this.renderInfoMessage() : null}
+								<div className="form-group  field-name">
+									<label htmlFor="name">
+										Name
 									</label>
 									<div className="input-div">
-										<input type="text" name="invoiceNumber" defaultValue={this.props.data.invoice_details.invoiceNumber} className="form-control " autoFocus="autoFocus" required="required" />
+										<input type="text" name="name" defaultValue={this.props.data.classroom_details.name} className="form-control " autoFocus="autoFocus" required="required" />
 										<span id="help-text" className="help-block" />
 										<span id="error-text" className="help-block" />
 									</div>
 								</div>
-										<div className="form-group  field-date">
-						<label htmlFor="date">
-							Invoice date
+										<div className="form-group  field-phone">
+						<label htmlFor="phone">
+							Phone
 						</label>
 						<div className="input-div">
-							<div className="input-group date">
-								<input type="text" name="date" defaultValue={dateUtils.formatDate(this.props.data.invoice_details.date, 'MM-DD-YYYY')} className="form-control " required="required" data-type="date" data-format="MM-DD-YYYY" />
-								<span className="input-group-addon">
-									<i className="fa fa-calendar" />
-								</span>
-							</div>
+							<input type="text" name="phone" defaultValue={this.props.data.classroom_details.phone} className="form-control " />
 							<span id="help-text" className="help-block" />
 							<span id="error-text" className="help-block" />
 						</div>
 					</div>
-					<div className="form-group  field-classroom-id">
-						<label htmlFor="classroomId">
-							Classroom
+					<div className="form-group  field-email">
+						<label htmlFor="email">
+							E-mail
 						</label>
 						<div className="input-div">
-							<select className="form-control " name="classroomId" defaultValue={this.props.data.invoice_details.classroomId} required="required">
-								{this.props.data.classroom_list.map(function(item, index) { return(
-								<option key={"dynamic-" + index} value={item._id}>									{item.name}</option>
-								); }) }
-							</select>
+							<input type="text" name="email" defaultValue={this.props.data.classroom_details.email} className="form-control " data-type="email" />
+							<span id="help-text" className="help-block" />
+							<span id="error-text" className="help-block" />
+						</div>
+					</div>
+					<div className="form-group  field-note">
+						<label htmlFor="note">
+							Note
+						</label>
+						<div className="input-div">
+							<textarea className="form-control " name="note" defaultValue={this.props.data.classroom_details.note} />
 							<span id="help-text" className="help-block" />
 							<span id="error-text" className="help-block" />
 						</div>

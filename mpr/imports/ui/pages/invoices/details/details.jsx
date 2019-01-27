@@ -269,13 +269,13 @@ export class InvoicesDetailsPageDetailsForm extends Component {
 							</p>
 						</div>
 					</div>
-					<div className="form-group  field-customer-name">
-						<label htmlFor="customer.name" className="col-sm-3 control-label">
-							Customer
+					<div className="form-group  field-classroom-name">
+						<label htmlFor="classroom.name" className="col-sm-3 control-label">
+							Classroom
 						</label>
 						<div className="input-div col-sm-9">
-							<p className="form-control-static  control-field-customer-name">
-								{this.props.data.invoice_details.customer.name}
+							<p className="form-control-static  control-field-classroom-name">
+								{this.props.data.invoice_details.classroom.name}
 							</p>
 						</div>
 					</div>

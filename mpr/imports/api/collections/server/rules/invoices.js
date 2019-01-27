@@ -1,5 +1,5 @@
 import {Invoices} from "/imports/api/collections/both/invoices.js";
-import {Customers} from "/imports/api/collections/both/customers.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 
 Invoices.allow({
 	insert: function (userId, doc) {
@@ -48,15 +48,15 @@ Invoices.before.remove(function(userId, doc) {
 
 Invoices.after.insert(function(userId, doc) {
 	
-var sum = 0; Invoices.find({ customerId: doc.customerId }).map(function(item) { sum += item.totalAmount; }); Customers.update({ _id: doc.customerId }, { $set: { invoiced: sum }});
+var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { invoiced: sum }});
 });
 
 Invoices.after.update(function(userId, doc, fieldNames, modifier, options) {
 	
-var sum = 0; Invoices.find({ customerId: doc.customerId }).map(function(item) { sum += item.totalAmount; }); Customers.update({ _id: doc.customerId }, { $set: { invoiced: sum }});
+var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { invoiced: sum }});
 });
 
 Invoices.after.remove(function(userId, doc) {
 	
-var sum = 0; Invoices.find({ customerId: doc.customerId }).map(function(item) { sum += item.totalAmount; }); Customers.update({ _id: doc.customerId }, { $set: { invoiced: sum }});
+var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { invoiced: sum }});
 });

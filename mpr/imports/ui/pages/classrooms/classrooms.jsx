@@ -5,7 +5,7 @@ import {pathFor, menuItemClass} from "/imports/modules/client/router_utils";
 import {Loading} from "/imports/ui/pages/loading/loading.jsx";
 import {mergeObjects} from "/imports/modules/both/object_utils";
 import * as databaseUtils from "/imports/modules/both/database_utils";
-import {Invoices} from "/imports/api/collections/both/invoices.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 import * as objectUtils from "/imports/modules/both/object_utils";
 import * as dateUtils from "/imports/modules/both/date_utils";
 import * as httpUtils from "/imports/modules/client/http_utils";
@@ -13,7 +13,7 @@ import {Markdown} from "/imports/ui/components/markdown/markdown.jsx";
 import {ConfirmationDialog} from "/imports/ui/components/confirmation_dialog/confirmation_dialog.jsx";
 
 
-export class InvoicesPage extends Component {
+export class ClassroomsPage extends Component {
 	constructor () {
 		super();
 		
@@ -52,7 +52,7 @@ export class InvoicesPage extends Component {
 							<div className="col-md-12">
 							</div>
 						</div>
-						<InvoicesPageView data={this.props.data} routeParams={this.props.routeParams} />
+						<ClassroomsPageView data={this.props.data} routeParams={this.props.routeParams} />
 					</div>
 				</div>
 			);
@@ -60,15 +60,15 @@ export class InvoicesPage extends Component {
 	}
 }
 
-export const InvoicesPageContainer = withTracker(function(props) {
+export const ClassroomsPageContainer = withTracker(function(props) {
 
-	let invoiceListPagedExtraParams = {
-		searchText: Session.get("InvoiceListPagedSearchString") || "",
-		searchFields: Session.get("InvoiceListPagedSearchFields") || ["invoiceNumber", "date", "classroomId", "classroom.name", "totalAmount"],
-		sortBy: Session.get("InvoiceListPagedSortBy") || "",
-		sortAscending: Session.get("InvoiceListPagedSortAscending"),
-		pageNo: Session.get("InvoiceListPagedPageNo") || 0,
-		pageSize: Session.get("InvoiceListPagedPageSize") || 20
+	let classroomListPagedExtraParams = {
+		searchText: Session.get("ClassroomListPagedSearchString") || "",
+		searchFields: Session.get("ClassroomListPagedSearchFields") || ["name", "phone", "email", "note", "invoiced"],
+		sortBy: Session.get("ClassroomListPagedSortBy") || "",
+		sortAscending: Session.get("ClassroomListPagedSortAscending"),
+		pageNo: Session.get("ClassroomListPagedPageNo") || 0,
+		pageSize: Session.get("ClassroomListPagedPageSize") || 20
 	};
 
 
@@ -76,8 +76,8 @@ export const InvoicesPageContainer = withTracker(function(props) {
 		
 
 		let subs = [
-			Meteor.subscribe("invoice_list_paged", invoiceListPagedExtraParams),
-			Meteor.subscribe("invoice_list_paged_count", invoiceListPagedExtraParams)
+			Meteor.subscribe("classroom_list_paged", classroomListPagedExtraParams),
+			Meteor.subscribe("classroom_list_paged_count", classroomListPagedExtraParams)
 		];
 		let ready = true;
 		_.each(subs, function(sub) {
@@ -94,23 +94,23 @@ export const InvoicesPageContainer = withTracker(function(props) {
 
 		data = {
 
-				invoice_list_paged: Invoices.find(databaseUtils.extendFilter({}, invoiceListPagedExtraParams), databaseUtils.extendOptions({sort:{invoiceNumber:-1}}, invoiceListPagedExtraParams)).fetch(),
-				invoice_list_paged_count: Counts.get("invoice_list_paged_count")
+				classroom_list_paged: Classrooms.find(databaseUtils.extendFilter({}, classroomListPagedExtraParams), databaseUtils.extendOptions({sort:{name:1}}, classroomListPagedExtraParams)).fetch(),
+				classroom_list_paged_count: Counts.get("classroom_list_paged_count")
 			};
 		
 
 		
-		data.invoice_list_paged_page_count = invoiceListPagedExtraParams && invoiceListPagedExtraParams.pageSize ? Math.ceil(data.invoice_list_paged_count / invoiceListPagedExtraParams.pageSize) : 1;
-		if(invoiceListPagedExtraParams.pageNo >= data.invoice_list_paged_page_count) {
-			Session.set("InvoiceListPagedPageNo", data.invoice_list_paged_page_count > 0 ? data.invoice_list_paged_page_count - 1 : 0);
+		data.classroom_list_paged_page_count = classroomListPagedExtraParams && classroomListPagedExtraParams.pageSize ? Math.ceil(data.classroom_list_paged_count / classroomListPagedExtraParams.pageSize) : 1;
+		if(classroomListPagedExtraParams.pageNo >= data.classroom_list_paged_page_count) {
+			Session.set("ClassroomListPagedPageNo", data.classroom_list_paged_page_count > 0 ? data.classroom_list_paged_page_count - 1 : 0);
 		}
 
 	}
 	return { data: data };
 
-})(InvoicesPage);
+})(ClassroomsPage);
 
-export class InvoicesPageView extends Component {
+export class ClassroomsPageView extends Component {
 	constructor () {
 		super();
 
@@ -141,7 +141,7 @@ export class InvoicesPageView extends Component {
 	}
 
 	componentWillMount() {
-		Session.set("InvoiceListPagedSearchFields", ["invoiceNumber", "date", "classroomId", "classroom.name", "totalAmount"]);
+		Session.set("ClassroomListPagedSearchFields", ["name", "phone", "email", "note", "invoiced"]);
 
 		
 	}
@@ -155,19 +155,19 @@ export class InvoicesPageView extends Component {
 	}
 
 	isNotEmpty() {
-		return this.props.data.invoice_list_paged && this.props.data.invoice_list_paged.length > 0;
+		return this.props.data.classroom_list_paged && this.props.data.classroom_list_paged.length > 0;
 	}
 
 	isNotFound() {
-		return this.props.data.invoice_list_paged && this.props.data.invoice_list_paged.length == 0 && Session.get("InvoiceListPagedSearchString");
+		return this.props.data.classroom_list_paged && this.props.data.classroom_list_paged.length == 0 && Session.get("ClassroomListPagedSearchString");
 	}
 
 	noData() {
-		return (!this.props.data.invoice_list_paged || this.props.data.invoice_list_paged.length == 0) && !Session.get("InvoiceListPagedSearchString");
+		return (!this.props.data.classroom_list_paged || this.props.data.classroom_list_paged.length == 0) && !Session.get("ClassroomListPagedSearchString");
 	}
 
 	onInsert(e) {
-		FlowRouter.go("invoices.insert", objectUtils.mergeObjects(FlowRouter.current().params, {}));
+		FlowRouter.go("classrooms.insert", objectUtils.mergeObjects(FlowRouter.current().params, {}));
 	}
 
 	onSearch(e) {
@@ -176,7 +176,7 @@ export class InvoicesPageView extends Component {
 		let searchInput = form.find("#dataview-search-input");
 		searchInput.focus();
 		let searchString = searchInput.val();
-		Session.set("InvoiceListPagedSearchString", searchString);
+		Session.set("ClassroomListPagedSearchString", searchString);
 	}
 
 	onSearchKeyDown(e) {
@@ -186,7 +186,7 @@ export class InvoicesPageView extends Component {
 			let form = $(e.currentTarget).closest("form");
 			let searchInput = form.find("#dataview-search-input");
 			searchInput.val("");
-			Session.set("InvoiceListPagedSearchString", "");
+			Session.set("ClassroomListPagedSearchString", "");
 			return false;
 		}
 		return true;
@@ -195,32 +195,32 @@ export class InvoicesPageView extends Component {
 	onSort(e) {
 		e.preventDefault();
 
-		let oldSortBy = Session.get("InvoiceListPagedSortBy") || "";
+		let oldSortBy = Session.get("ClassroomListPagedSortBy") || "";
 		let newSortBy = $(e.currentTarget).attr("data-sort");
-		Session.set("InvoiceListPagedSortBy", newSortBy);
+		Session.set("ClassroomListPagedSortBy", newSortBy);
 		if(oldSortBy == newSortBy) {
-			let sortAscending = Session.get("InvoiceListPagedSortAscending");
+			let sortAscending = Session.get("ClassroomListPagedSortAscending");
 			if(typeof sortAscending == "undefined") {
 				sortAscending = true;
 			}
-			Session.set("InvoiceListPagedSortAscending", !sortAscending);
+			Session.set("ClassroomListPagedSortAscending", !sortAscending);
 		} else {
-			Session.set("InvoiceListPagedSortAscending", true);
+			Session.set("ClassroomListPagedSortAscending", true);
 		}
 	}
 
 	exportData(fileType) {
 		let extraParams = {
-			searchText: Session.get("InvoiceListPagedSearchString") || "",
-			searchFields: Session.get("InvoiceListPagedSearchFields") || ["invoiceNumber", "date", "classroomId", "classroom.name", "totalAmount"],
-			sortBy: Session.get("InvoiceListPagedSortBy") || ""
+			searchText: Session.get("ClassroomListPagedSearchString") || "",
+			searchFields: Session.get("ClassroomListPagedSearchFields") || ["name", "phone", "email", "note", "invoiced"],
+			sortBy: Session.get("ClassroomListPagedSortBy") || ""
 		};
 
 		
 
-		let exportFields = ["invoiceNumber", "date", "classroom.name", "totalAmount"];
+		let exportFields = ["name", "phone", "email", "note", "invoiced"];
 
-		Meteor.call("invoiceListPagedExport", extraParams, exportFields, fileType, function(e, data) {
+		Meteor.call("classroomListPagedExport", extraParams, exportFields, fileType, function(e, data) {
 			if(e) {
 				alert(e);
 				return;
@@ -245,17 +245,17 @@ export class InvoicesPageView extends Component {
 
 	onPrevPage(e) {
 		e.preventDefault();
-		let currentPage = Session.get("InvoiceListPagedPageNo") || 0;
+		let currentPage = Session.get("ClassroomListPagedPageNo") || 0;
 		if(currentPage > 0) {
-			Session.set("InvoiceListPagedPageNo", currentPage - 1);
+			Session.set("ClassroomListPagedPageNo", currentPage - 1);
 		}
 	}
 
 	onNextPage(e) {
 		e.preventDefault();
-		let currentPage = Session.get("InvoiceListPagedPageNo") || 0;
-		if(currentPage < this.props.data.invoice_list_paged_page_count - 1) {
-			Session.set("InvoiceListPagedPageNo", currentPage + 1);
+		let currentPage = Session.get("ClassroomListPagedPageNo") || 0;
+		if(currentPage < this.props.data.classroom_list_paged_page_count - 1) {
+			Session.set("ClassroomListPagedPageNo", currentPage + 1);
 		}
 	}
 
@@ -268,17 +268,17 @@ export class InvoicesPageView extends Component {
 				<table id="dataview-table" className="table table-striped table-hover">
 					<thead id="dataview-table-header">
 						<tr id="dataview-table-header-row">
-							<th className="th-sortable" data-sort="invoiceNumber" onClick={this.onSort}>
-								Invoice number
+							<th className="th-sortable" data-sort="name" onClick={this.onSort}>
+								Name
 							</th>
-							<th className="th-sortable" data-sort="date" onClick={this.onSort}>
-								Invoice date
+							<th className="th-sortable" data-sort="phone" onClick={this.onSort}>
+								Phone
 							</th>
-							<th className="th-sortable" data-sort="classroom.name" onClick={this.onSort}>
-								Classroom
+							<th className="th-sortable" data-sort="email" onClick={this.onSort}>
+								E-mail
 							</th>
-							<th className="th-sortable" data-sort="totalAmount" onClick={this.onSort}>
-								Total
+							<th className="th-sortable" data-sort="invoiced" onClick={this.onSort}>
+								Invoiced
 							</th>
 							<th>
 								&nbsp;
@@ -289,9 +289,9 @@ export class InvoicesPageView extends Component {
 						</tr>
 					</thead>
 					<tbody id="dataview-table-items">
-						{this.props.data.invoice_list_paged.map(function(item) {
+						{this.props.data.classroom_list_paged.map(function(item) {
 			return(
-							<InvoicesPageViewTableItems key={item._id} data={item} routeParams={self.props.routeParams} onDelete={self.onDelete} parentData={parentData} />
+							<ClassroomsPageViewTableItems key={item._id} data={item} routeParams={self.props.routeParams} onDelete={self.onDelete} parentData={parentData} />
 									);
 		})}
 					</tbody>
@@ -325,7 +325,7 @@ export class InvoicesPageView extends Component {
 	}
 
 	renderPager() {
-		let currentPage = Session.get("InvoiceListPagedPageNo") || 0;
+		let currentPage = Session.get("ClassroomListPagedPageNo") || 0;
 		return (
 			<nav key="pager" aria-label="...">
 				<ul className="pager">
@@ -337,7 +337,7 @@ export class InvoicesPageView extends Component {
 						&nbsp;
 					</li>
 					: null}
-					{currentPage < this.props.data.invoice_list_paged_page_count - 1 ?
+					{currentPage < this.props.data.classroom_list_paged_page_count - 1 ?
 								<li>
 									&nbsp;
 									<a href="#" onClick={this.onNextPage}>
@@ -351,7 +351,7 @@ export class InvoicesPageView extends Component {
 	}
 
 	renderData() {
-		let viewStyle = Session.get("InvoicesPageViewStyle") || "table";
+		let viewStyle = Session.get("ClassroomsPageViewStyle") || "table";
 		switch(viewStyle) {
 			case "table": return this.renderTable(); break;
 			case "blog": return this.renderBlog(); break;
@@ -364,7 +364,7 @@ export class InvoicesPageView extends Component {
 
 
 	insertButtonClass() {
-		return Invoices.userCanInsert(Meteor.userId(), {}) ? "" : "hidden";
+		return Classrooms.userCanInsert(Meteor.userId(), {}) ? "" : "hidden";
 	}
 
 	
@@ -373,11 +373,11 @@ export class InvoicesPageView extends Component {
 
 	render() {
 		return (
-			<div id="invoices-page-view" className="">
+			<div id="classrooms-page-view" className="">
 				<h2 id="component-title">
 					<span id="component-title-icon" className="">
 					</span>
-					Invoices
+					Classrooms
 				</h2>
 				<div id="controls-row" className="row">
 					<div className="col-md-12">
@@ -395,7 +395,7 @@ export class InvoicesPageView extends Component {
 			this.noData() ? null : (
 									<div>
 										<div id="dataview-controls-search-group" className="input-group">
-											<input type="text" className="form-control" id="dataview-search-input" placeholder="Search" name="search" defaultValue={Session.get("InvoiceListPagedSearchString")} onKeyDown={this.onSearchKeyDown} autoFocus={true} />
+											<input type="text" className="form-control" id="dataview-search-input" placeholder="Search" name="search" defaultValue={Session.get("ClassroomListPagedSearchString")} onKeyDown={this.onSearchKeyDown} autoFocus={true} />
 											<span className="input-group-btn">
 												<button type="submit" id="dataview-search-button" className="btn btn-primary" onClick={this.onSearch}>
 													<span className="fa fa-search">
@@ -445,18 +445,18 @@ export class InvoicesPageView extends Component {
 				</div>
 				{this.isNotEmpty() ? [this.renderData(), this.renderPager()] : (this.isNotFound() ?
 				<div className="alert alert-warning">
-					{"\"" + Session.get("InvoiceListPagedSearchString") + "\" not found."}
+					{"\"" + Session.get("ClassroomListPagedSearchString") + "\" not found."}
 				</div>
 				:
 				<div className="alert alert-info">
-					No invoices :(
+					No classrooms :(
 				</div>
 				)}
 			</div>
 		);
 	}
 }
-export class InvoicesPageViewTableItems extends Component {
+export class ClassroomsPageViewTableItems extends Component {
 	constructor() {
 		super();
 		this.onToggle = this.onToggle.bind(this);
@@ -475,7 +475,7 @@ export class InvoicesPageViewTableItems extends Component {
 		let data = {};
 		data[toggleField] = !this.props.data[toggleField];
 
-		Meteor.call("invoicesUpdate", itemId, data, function(err, res) {
+		Meteor.call("classroomsUpdate", itemId, data, function(err, res) {
 			if(err) {
 				alert(err);
 			}
@@ -486,7 +486,7 @@ export class InvoicesPageViewTableItems extends Component {
 		e.stopPropagation();
 		let self = this;
 		let itemId = this.props.data._id;
-		FlowRouter.go("invoices.edit", objectUtils.mergeObjects(FlowRouter.current().params, {invoiceId: this.props.data._id}));
+		FlowRouter.go("classrooms.edit", objectUtils.mergeObjects(FlowRouter.current().params, {classroomId: this.props.data._id}));
 	}
 
 	onDelete(e) {
@@ -497,7 +497,7 @@ export class InvoicesPageViewTableItems extends Component {
 			message: "Delete? Are you sure?",
 			title: "Delete",
 			onYes: function(id) {
-				Meteor.call("invoicesRemove", id, function(err, res) {
+				Meteor.call("classroomsRemove", id, function(err, res) {
 					if(err) {
 						alert(err);
 					}
@@ -520,15 +520,15 @@ export class InvoicesPageViewTableItems extends Component {
 		let itemId = item ? item._id : null;
 
 		
-		FlowRouter.go("invoices.details", objectUtils.mergeObjects(FlowRouter.current().params, {invoiceId: this.props.data._id}));
+		FlowRouter.go("classrooms.details", objectUtils.mergeObjects(FlowRouter.current().params, {classroomId: this.props.data._id}));
 	}
 
 	editButtonClass() {
-		return Invoices.userCanUpdate(Meteor.userId(), this.props.data) ? "" : "hidden";
+		return Classrooms.userCanUpdate(Meteor.userId(), this.props.data) ? "" : "hidden";
 	}
 
 	deleteButtonClass() {
-		return Invoices.userCanRemove(Meteor.userId(), this.props.data) ? "" : "hidden";
+		return Classrooms.userCanRemove(Meteor.userId(), this.props.data) ? "" : "hidden";
 	}
 
 	
@@ -543,16 +543,16 @@ export class InvoicesPageViewTableItems extends Component {
 		return(
 			<tr id="dataview-table-items-row">
 				<td onClick={this.onSelect}>
-					{this.props.data.invoiceNumber}
+					{this.props.data.name}
 				</td>
 				<td onClick={this.onSelect}>
-					{dateUtils.formatDate(this.props.data.date, "MM-DD-YYYY")}
+					{this.props.data.phone}
 				</td>
 				<td onClick={this.onSelect}>
-					{this.props.data.classroom.name}
+					{this.props.data.email}
 				</td>
 				<td onClick={this.onSelect}>
-					{this.props.data.totalAmount}
+					{this.props.data.invoiced}
 				</td>
 				<td className="td-icon">
 					<span id="edit-button" className={`fa fa-pencil ${this.editButtonClass()}`} title="Edit" onClick={this.onEdit}>

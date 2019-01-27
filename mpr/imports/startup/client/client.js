@@ -1,7 +1,7 @@
 import "/imports/modules/client/globals/init.js";
 
-import "/imports/api/collections/both/customers.js";
 import "/imports/api/collections/both/invoices.js";
+import "/imports/api/collections/both/classrooms.js";
 import "/imports/api/collections/both/invoice_items.js";
 
 import "/imports/api/collections/both/joins/joins.js";

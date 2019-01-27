@@ -2,7 +2,7 @@
 	"output_files": [
 		{
 			"path": "imports/ui/router/router.jsx",
-			"checksum": "66284b7aa38e19fa3cf910be718453085c54ddf1"
+			"checksum": "7bf88df1ce896e90f09185a6f4d0e6f170cbcaa4"
 		},
 		{
 			"path": "imports/api/server_routes/router.js",
@@ -10,15 +10,15 @@
 		},
 		{
 			"path": "imports/startup/client/client.js",
-			"checksum": "9036dce151b44a93752d2c74741242127d85c0a1"
+			"checksum": "5957eaad9b345353cf3905641a2acdef2b6b1bdc"
 		},
 		{
 			"path": "client/index.html",
-			"checksum": "936927e19c789ac3cafb3818ab24f7f4aa1bde27"
+			"checksum": "0e0c54a4e56f410aba16ec88ac82c38ec0214ad2"
 		},
 		{
 			"path": "imports/startup/server/server.js",
-			"checksum": "250d8150463e8736fae3523843fa70b06ad0710a"
+			"checksum": "0a2f618ab317f724141fd584aea6e44262eb84f3"
 		},
 		{
 			"path": "imports/ui/pages/not_found/not_found.jsx",
@@ -50,7 +50,7 @@
 		},
 		{
 			"path": "imports/ui/layouts/layout.jsx",
-			"checksum": "9b1045bf6a2b5e4536ed01097c836bc4c5c7438e"
+			"checksum": "892d9f3266d14353ec99a3d3acaf980644be0d6c"
 		},
 		{
 			"path": "imports/ui/pages/home_public/home_public.jsx",
@@ -77,32 +77,32 @@
 			"checksum": "8c55c8677fb7d8dea31654144424e744edc4dfbb"
 		},
 		{
-			"path": "imports/ui/pages/customers/customers.jsx",
-			"checksum": "7be0ead08ab38dea8f7c120e934ac4844d65f2ed"
+			"path": "imports/ui/pages/classrooms/classrooms.jsx",
+			"checksum": "c5ce541b1ceb310e3753ca70c854c7688f05c8c4"
 		},
 		{
-			"path": "imports/ui/pages/customers/insert/insert.jsx",
-			"checksum": "3b15c7701dfbc40ba499a1177311fbd8b8cec59d"
+			"path": "imports/ui/pages/classrooms/insert/insert.jsx",
+			"checksum": "546faae130be49016280048f9330d317d157bf82"
 		},
 		{
-			"path": "imports/ui/pages/customers/details/details.jsx",
-			"checksum": "faa50e226e4da4f7cc2ead7269e3feb1075039b6"
+			"path": "imports/ui/pages/classrooms/details/details.jsx",
+			"checksum": "b537deff34df9b7a457ff5657a0161448498aa19"
 		},
 		{
-			"path": "imports/ui/pages/customers/edit/edit.jsx",
-			"checksum": "e77b0b016743a8de736f36a430eee02a07b77ac2"
+			"path": "imports/ui/pages/classrooms/edit/edit.jsx",
+			"checksum": "ba98b7c95a8c4796387b011b13b56862d45e77c6"
 		},
 		{
 			"path": "imports/ui/pages/invoices/invoices.jsx",
-			"checksum": "3b153f11a3597ab11317b41687dfec0201ddac79"
+			"checksum": "f5e4d4028cde33a0ee4a2976be32c63666209b7d"
 		},
 		{
 			"path": "imports/ui/pages/invoices/insert/insert.jsx",
-			"checksum": "c32704e5f351ba6ad3f7640ac92d5d8aa1a1f98f"
+			"checksum": "ed0d4caf639864c1074f76aec42875f283ae5ca1"
 		},
 		{
 			"path": "imports/ui/pages/invoices/details/details.jsx",
-			"checksum": "b7dfc310d780f980112b97bb078f54b07f480500"
+			"checksum": "d016d3b4b5065e23a85f460e5c6367c3b2c8f370"
 		},
 		{
 			"path": "imports/ui/pages/invoices/details/items/items.jsx",
@@ -118,7 +118,7 @@
 		},
 		{
 			"path": "imports/ui/pages/invoices/edit/edit.jsx",
-			"checksum": "27271fb1a03c112875d314f7b00bdaf13a34e022"
+			"checksum": "cb7995c521be0f1ac3dd88218ea7b8b056285e1a"
 		},
 		{
 			"path": "imports/ui/pages/user_settings/user_settings.jsx",
@@ -137,20 +137,20 @@
 			"checksum": "534c73a40841baea31c3370edd371da130ab7b49"
 		},
 		{
-			"path": "imports/api/collections/both/customers.js",
-			"checksum": "1fb69692cd2893e8bb519131465f804b0146ed28"
+			"path": "imports/api/collections/both/classrooms.js",
+			"checksum": "052e1d488baad98da284c205a4dbe9d3101edb9f"
 		},
 		{
-			"path": "imports/api/methods/customers.js",
-			"checksum": "b99f4cc6fef422fa02224417f756a27fb8ff19a8"
+			"path": "imports/api/methods/classrooms.js",
+			"checksum": "a9ce6426b7c0c4f3eac8f54cfbf3ec0a6bf6f1ce"
 		},
 		{
-			"path": "imports/api/collections/server/rules/customers.js",
-			"checksum": "9e84c1fc87e8c8daac64cae0b56b6d5a5abb9ee5"
+			"path": "imports/api/collections/server/rules/classrooms.js",
+			"checksum": "6116a19024ba83f463f72067aa35f4d72f897a3e"
 		},
 		{
-			"path": "imports/api/collections/server/publications/customers.js",
-			"checksum": "f4d4a5bc2ddd3ea4d84eb503105fe660762321b7"
+			"path": "imports/api/collections/server/publications/classrooms.js",
+			"checksum": "1f4f52f98d6e91cde51e127d0dc288ba69db1e9c"
 		},
 		{
 			"path": "imports/api/collections/both/invoices.js",
@@ -162,7 +162,7 @@
 		},
 		{
 			"path": "imports/api/collections/server/rules/invoices.js",
-			"checksum": "a1dc5d3c06bc4c94587909d4eeb9683894fbd7a7"
+			"checksum": "c5a8ce365333a0f866828d843e12f5f39360b83a"
 		},
 		{
 			"path": "imports/api/collections/server/publications/invoices.js",
@@ -186,7 +186,7 @@
 		},
 		{
 			"path": "imports/api/collections/both/joins/joins.js",
-			"checksum": "32f6f255bac0f556a460df511cc0e85034279115"
+			"checksum": "881e6da369265491bde8020ca0cb9c6da98a39cb"
 		},
 		{
 			"path": "client/main.js",
@@ -432,10 +432,10 @@
 		"imports/ui/components/markdown/",
 		"imports/ui/layouts/",
 		"imports/ui/pages/",
-		"imports/ui/pages/customers/",
-		"imports/ui/pages/customers/details/",
-		"imports/ui/pages/customers/edit/",
-		"imports/ui/pages/customers/insert/",
+		"imports/ui/pages/classrooms/",
+		"imports/ui/pages/classrooms/details/",
+		"imports/ui/pages/classrooms/edit/",
+		"imports/ui/pages/classrooms/insert/",
 		"imports/ui/pages/forgot_password/",
 		"imports/ui/pages/home_private/",
 		"imports/ui/pages/home_public/",
