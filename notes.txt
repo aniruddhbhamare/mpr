@@ -1,0 +1,7 @@
+https://github.com/sushilshimpi/mpr.git
+git remote set-url origin git@github.com:sushilshimpi/mpr.git
+
+meteor-kitchen ./mpr.json ./mpr --react
+
+
+git remote 
