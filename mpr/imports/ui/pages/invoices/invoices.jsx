@@ -64,7 +64,7 @@ export const InvoicesPageContainer = withTracker(function(props) {
 
 	let invoiceListPagedExtraParams = {
 		searchText: Session.get("InvoiceListPagedSearchString") || "",
-		searchFields: Session.get("InvoiceListPagedSearchFields") || ["invoiceNumber", "date", "customerId", "customer.name", "totalAmount"],
+		searchFields: Session.get("InvoiceListPagedSearchFields") || ["invoiceNumber", "date", "classroomId", "classroom.name", "totalAmount"],
 		sortBy: Session.get("InvoiceListPagedSortBy") || "",
 		sortAscending: Session.get("InvoiceListPagedSortAscending"),
 		pageNo: Session.get("InvoiceListPagedPageNo") || 0,
@@ -141,7 +141,7 @@ export class InvoicesPageView extends Component {
 	}
 
 	componentWillMount() {
-		Session.set("InvoiceListPagedSearchFields", ["invoiceNumber", "date", "customerId", "customer.name", "totalAmount"]);
+		Session.set("InvoiceListPagedSearchFields", ["invoiceNumber", "date", "classroomId", "classroom.name", "totalAmount"]);
 
 		
 	}
@@ -212,13 +212,13 @@ export class InvoicesPageView extends Component {
 	exportData(fileType) {
 		let extraParams = {
 			searchText: Session.get("InvoiceListPagedSearchString") || "",
-			searchFields: Session.get("InvoiceListPagedSearchFields") || ["invoiceNumber", "date", "customerId", "customer.name", "totalAmount"],
+			searchFields: Session.get("InvoiceListPagedSearchFields") || ["invoiceNumber", "date", "classroomId", "classroom.name", "totalAmount"],
 			sortBy: Session.get("InvoiceListPagedSortBy") || ""
 		};
 
 		
 
-		let exportFields = ["invoiceNumber", "date", "customer.name", "totalAmount"];
+		let exportFields = ["invoiceNumber", "date", "classroom.name", "totalAmount"];
 
 		Meteor.call("invoiceListPagedExport", extraParams, exportFields, fileType, function(e, data) {
 			if(e) {
@@ -274,8 +274,8 @@ export class InvoicesPageView extends Component {
 							<th className="th-sortable" data-sort="date" onClick={this.onSort}>
 								Invoice date
 							</th>
-							<th className="th-sortable" data-sort="customer.name" onClick={this.onSort}>
-								Customer
+							<th className="th-sortable" data-sort="classroom.name" onClick={this.onSort}>
+								Classroom
 							</th>
 							<th className="th-sortable" data-sort="totalAmount" onClick={this.onSort}>
 								Total
@@ -549,7 +549,7 @@ export class InvoicesPageViewTableItems extends Component {
 					{dateUtils.formatDate(this.props.data.date, "MM-DD-YYYY")}
 				</td>
 				<td onClick={this.onSelect}>
-					{this.props.data.customer.name}
+					{this.props.data.classroom.name}
 				</td>
 				<td onClick={this.onSelect}>
 					{this.props.data.totalAmount}

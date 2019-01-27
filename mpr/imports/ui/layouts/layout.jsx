@@ -93,7 +93,7 @@ export class PublicLayout extends Component {
 										</span>
 									</button>
 									<a className="navbar-brand" href="/">
-										Montessori Progress Report
+										MPR v0.0.1
 									</a>
 								</div>
 								<div id="menu" className="collapse navbar-collapse">
@@ -278,7 +278,7 @@ export class PrivateLayout extends Component {
 										</span>
 									</button>
 									<a className="navbar-brand" href="/">
-										Montessori Progress Report
+										MPR v0.0.1
 									</a>
 								</div>
 								<div id="menu" className="collapse navbar-collapse">
@@ -372,10 +372,10 @@ export class PrivateLayoutLeftMenu extends Component {
 						</span>
 					</a>
 				</li>
-				<li id="menu-item-simple" className={menuItemClass('customers')}>
-					<a href={pathFor('customers', {})}>
+				<li id="menu-item-simple" className={menuItemClass('classrooms')}>
+					<a href={pathFor('classrooms', {})}>
 						<span className="item-title">
-							Customers
+							Classrooms
 						</span>
 					</a>
 				</li>

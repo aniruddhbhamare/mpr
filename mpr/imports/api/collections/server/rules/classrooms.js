@@ -1,6 +1,6 @@
-import {Customers} from "/imports/api/collections/both/customers.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 
-Customers.allow({
+Classrooms.allow({
 	insert: function (userId, doc) {
 		return false;
 	},
@@ -14,7 +14,7 @@ Customers.allow({
 	}
 });
 
-Customers.before.insert(function(userId, doc) {
+Classrooms.before.insert(function(userId, doc) {
 	doc.createdAt = new Date();
 	doc.createdBy = userId;
 	doc.modifiedAt = doc.createdAt;
@@ -25,7 +25,7 @@ Customers.before.insert(function(userId, doc) {
 if(!doc.invoiced) doc.invoiced = 0;
 });
 
-Customers.before.update(function(userId, doc, fieldNames, modifier, options) {
+Classrooms.before.update(function(userId, doc, fieldNames, modifier, options) {
 	modifier.$set = modifier.$set || {};
 	modifier.$set.modifiedAt = new Date();
 	modifier.$set.modifiedBy = userId;
@@ -33,7 +33,7 @@ Customers.before.update(function(userId, doc, fieldNames, modifier, options) {
 	
 });
 
-Customers.before.upsert(function(userId, selector, modifier, options) {
+Classrooms.before.upsert(function(userId, selector, modifier, options) {
 	modifier.$set = modifier.$set || {};
 	modifier.$set.modifiedAt = new Date();
 	modifier.$set.modifiedBy = userId;
@@ -41,18 +41,18 @@ Customers.before.upsert(function(userId, selector, modifier, options) {
 	/*BEFORE_UPSERT_CODE*/
 });
 
-Customers.before.remove(function(userId, doc) {
+Classrooms.before.remove(function(userId, doc) {
 	
 });
 
-Customers.after.insert(function(userId, doc) {
+Classrooms.after.insert(function(userId, doc) {
 	
 });
 
-Customers.after.update(function(userId, doc, fieldNames, modifier, options) {
+Classrooms.after.update(function(userId, doc, fieldNames, modifier, options) {
 	
 });
 
-Customers.after.remove(function(userId, doc) {
+Classrooms.after.remove(function(userId, doc) {
 	
 });

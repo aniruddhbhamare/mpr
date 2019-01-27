@@ -5,7 +5,7 @@ import {pathFor, menuItemClass} from "/imports/modules/client/router_utils";
 import {Loading} from "/imports/ui/pages/loading/loading.jsx";
 import {mergeObjects} from "/imports/modules/both/object_utils";
 import * as databaseUtils from "/imports/modules/both/database_utils";
-import {Customers} from "/imports/api/collections/both/customers.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 import * as objectUtils from "/imports/modules/both/object_utils";
 import * as dateUtils from "/imports/modules/both/date_utils";
 import * as httpUtils from "/imports/modules/client/http_utils";
@@ -13,7 +13,7 @@ import {Markdown} from "/imports/ui/components/markdown/markdown.jsx";
 import {ConfirmationDialog} from "/imports/ui/components/confirmation_dialog/confirmation_dialog.jsx";
 
 
-export class CustomersPage extends Component {
+export class ClassroomsPage extends Component {
 	constructor () {
 		super();
 		
@@ -52,7 +52,7 @@ export class CustomersPage extends Component {
 							<div className="col-md-12">
 							</div>
 						</div>
-						<CustomersPageView data={this.props.data} routeParams={this.props.routeParams} />
+						<ClassroomsPageView data={this.props.data} routeParams={this.props.routeParams} />
 					</div>
 				</div>
 			);
@@ -60,15 +60,15 @@ export class CustomersPage extends Component {
 	}
 }
 
-export const CustomersPageContainer = withTracker(function(props) {
+export const ClassroomsPageContainer = withTracker(function(props) {
 
-	let customerListPagedExtraParams = {
-		searchText: Session.get("CustomerListPagedSearchString") || "",
-		searchFields: Session.get("CustomerListPagedSearchFields") || ["name", "phone", "email", "note", "invoiced"],
-		sortBy: Session.get("CustomerListPagedSortBy") || "",
-		sortAscending: Session.get("CustomerListPagedSortAscending"),
-		pageNo: Session.get("CustomerListPagedPageNo") || 0,
-		pageSize: Session.get("CustomerListPagedPageSize") || 20
+	let classroomListPagedExtraParams = {
+		searchText: Session.get("ClassroomListPagedSearchString") || "",
+		searchFields: Session.get("ClassroomListPagedSearchFields") || ["name", "phone", "email", "note", "invoiced"],
+		sortBy: Session.get("ClassroomListPagedSortBy") || "",
+		sortAscending: Session.get("ClassroomListPagedSortAscending"),
+		pageNo: Session.get("ClassroomListPagedPageNo") || 0,
+		pageSize: Session.get("ClassroomListPagedPageSize") || 20
 	};
 
 
@@ -76,8 +76,8 @@ export const CustomersPageContainer = withTracker(function(props) {
 		
 
 		let subs = [
-			Meteor.subscribe("customer_list_paged", customerListPagedExtraParams),
-			Meteor.subscribe("customer_list_paged_count", customerListPagedExtraParams)
+			Meteor.subscribe("classroom_list_paged", classroomListPagedExtraParams),
+			Meteor.subscribe("classroom_list_paged_count", classroomListPagedExtraParams)
 		];
 		let ready = true;
 		_.each(subs, function(sub) {
@@ -94,23 +94,23 @@ export const CustomersPageContainer = withTracker(function(props) {
 
 		data = {
 
-				customer_list_paged: Customers.find(databaseUtils.extendFilter({}, customerListPagedExtraParams), databaseUtils.extendOptions({sort:{name:1}}, customerListPagedExtraParams)).fetch(),
-				customer_list_paged_count: Counts.get("customer_list_paged_count")
+				classroom_list_paged: Classrooms.find(databaseUtils.extendFilter({}, classroomListPagedExtraParams), databaseUtils.extendOptions({sort:{name:1}}, classroomListPagedExtraParams)).fetch(),
+				classroom_list_paged_count: Counts.get("classroom_list_paged_count")
 			};
 		
 
 		
-		data.customer_list_paged_page_count = customerListPagedExtraParams && customerListPagedExtraParams.pageSize ? Math.ceil(data.customer_list_paged_count / customerListPagedExtraParams.pageSize) : 1;
-		if(customerListPagedExtraParams.pageNo >= data.customer_list_paged_page_count) {
-			Session.set("CustomerListPagedPageNo", data.customer_list_paged_page_count > 0 ? data.customer_list_paged_page_count - 1 : 0);
+		data.classroom_list_paged_page_count = classroomListPagedExtraParams && classroomListPagedExtraParams.pageSize ? Math.ceil(data.classroom_list_paged_count / classroomListPagedExtraParams.pageSize) : 1;
+		if(classroomListPagedExtraParams.pageNo >= data.classroom_list_paged_page_count) {
+			Session.set("ClassroomListPagedPageNo", data.classroom_list_paged_page_count > 0 ? data.classroom_list_paged_page_count - 1 : 0);
 		}
 
 	}
 	return { data: data };
 
-})(CustomersPage);
+})(ClassroomsPage);
 
-export class CustomersPageView extends Component {
+export class ClassroomsPageView extends Component {
 	constructor () {
 		super();
 
@@ -141,7 +141,7 @@ export class CustomersPageView extends Component {
 	}
 
 	componentWillMount() {
-		Session.set("CustomerListPagedSearchFields", ["name", "phone", "email", "note", "invoiced"]);
+		Session.set("ClassroomListPagedSearchFields", ["name", "phone", "email", "note", "invoiced"]);
 
 		
 	}
@@ -155,19 +155,19 @@ export class CustomersPageView extends Component {
 	}
 
 	isNotEmpty() {
-		return this.props.data.customer_list_paged && this.props.data.customer_list_paged.length > 0;
+		return this.props.data.classroom_list_paged && this.props.data.classroom_list_paged.length > 0;
 	}
 
 	isNotFound() {
-		return this.props.data.customer_list_paged && this.props.data.customer_list_paged.length == 0 && Session.get("CustomerListPagedSearchString");
+		return this.props.data.classroom_list_paged && this.props.data.classroom_list_paged.length == 0 && Session.get("ClassroomListPagedSearchString");
 	}
 
 	noData() {
-		return (!this.props.data.customer_list_paged || this.props.data.customer_list_paged.length == 0) && !Session.get("CustomerListPagedSearchString");
+		return (!this.props.data.classroom_list_paged || this.props.data.classroom_list_paged.length == 0) && !Session.get("ClassroomListPagedSearchString");
 	}
 
 	onInsert(e) {
-		FlowRouter.go("customers.insert", objectUtils.mergeObjects(FlowRouter.current().params, {}));
+		FlowRouter.go("classrooms.insert", objectUtils.mergeObjects(FlowRouter.current().params, {}));
 	}
 
 	onSearch(e) {
@@ -176,7 +176,7 @@ export class CustomersPageView extends Component {
 		let searchInput = form.find("#dataview-search-input");
 		searchInput.focus();
 		let searchString = searchInput.val();
-		Session.set("CustomerListPagedSearchString", searchString);
+		Session.set("ClassroomListPagedSearchString", searchString);
 	}
 
 	onSearchKeyDown(e) {
@@ -186,7 +186,7 @@ export class CustomersPageView extends Component {
 			let form = $(e.currentTarget).closest("form");
 			let searchInput = form.find("#dataview-search-input");
 			searchInput.val("");
-			Session.set("CustomerListPagedSearchString", "");
+			Session.set("ClassroomListPagedSearchString", "");
 			return false;
 		}
 		return true;
@@ -195,32 +195,32 @@ export class CustomersPageView extends Component {
 	onSort(e) {
 		e.preventDefault();
 
-		let oldSortBy = Session.get("CustomerListPagedSortBy") || "";
+		let oldSortBy = Session.get("ClassroomListPagedSortBy") || "";
 		let newSortBy = $(e.currentTarget).attr("data-sort");
-		Session.set("CustomerListPagedSortBy", newSortBy);
+		Session.set("ClassroomListPagedSortBy", newSortBy);
 		if(oldSortBy == newSortBy) {
-			let sortAscending = Session.get("CustomerListPagedSortAscending");
+			let sortAscending = Session.get("ClassroomListPagedSortAscending");
 			if(typeof sortAscending == "undefined") {
 				sortAscending = true;
 			}
-			Session.set("CustomerListPagedSortAscending", !sortAscending);
+			Session.set("ClassroomListPagedSortAscending", !sortAscending);
 		} else {
-			Session.set("CustomerListPagedSortAscending", true);
+			Session.set("ClassroomListPagedSortAscending", true);
 		}
 	}
 
 	exportData(fileType) {
 		let extraParams = {
-			searchText: Session.get("CustomerListPagedSearchString") || "",
-			searchFields: Session.get("CustomerListPagedSearchFields") || ["name", "phone", "email", "note", "invoiced"],
-			sortBy: Session.get("CustomerListPagedSortBy") || ""
+			searchText: Session.get("ClassroomListPagedSearchString") || "",
+			searchFields: Session.get("ClassroomListPagedSearchFields") || ["name", "phone", "email", "note", "invoiced"],
+			sortBy: Session.get("ClassroomListPagedSortBy") || ""
 		};
 
 		
 
 		let exportFields = ["name", "phone", "email", "note", "invoiced"];
 
-		Meteor.call("customerListPagedExport", extraParams, exportFields, fileType, function(e, data) {
+		Meteor.call("classroomListPagedExport", extraParams, exportFields, fileType, function(e, data) {
 			if(e) {
 				alert(e);
 				return;
@@ -245,17 +245,17 @@ export class CustomersPageView extends Component {
 
 	onPrevPage(e) {
 		e.preventDefault();
-		let currentPage = Session.get("CustomerListPagedPageNo") || 0;
+		let currentPage = Session.get("ClassroomListPagedPageNo") || 0;
 		if(currentPage > 0) {
-			Session.set("CustomerListPagedPageNo", currentPage - 1);
+			Session.set("ClassroomListPagedPageNo", currentPage - 1);
 		}
 	}
 
 	onNextPage(e) {
 		e.preventDefault();
-		let currentPage = Session.get("CustomerListPagedPageNo") || 0;
-		if(currentPage < this.props.data.customer_list_paged_page_count - 1) {
-			Session.set("CustomerListPagedPageNo", currentPage + 1);
+		let currentPage = Session.get("ClassroomListPagedPageNo") || 0;
+		if(currentPage < this.props.data.classroom_list_paged_page_count - 1) {
+			Session.set("ClassroomListPagedPageNo", currentPage + 1);
 		}
 	}
 
@@ -289,9 +289,9 @@ export class CustomersPageView extends Component {
 						</tr>
 					</thead>
 					<tbody id="dataview-table-items">
-						{this.props.data.customer_list_paged.map(function(item) {
+						{this.props.data.classroom_list_paged.map(function(item) {
 			return(
-							<CustomersPageViewTableItems key={item._id} data={item} routeParams={self.props.routeParams} onDelete={self.onDelete} parentData={parentData} />
+							<ClassroomsPageViewTableItems key={item._id} data={item} routeParams={self.props.routeParams} onDelete={self.onDelete} parentData={parentData} />
 									);
 		})}
 					</tbody>
@@ -325,7 +325,7 @@ export class CustomersPageView extends Component {
 	}
 
 	renderPager() {
-		let currentPage = Session.get("CustomerListPagedPageNo") || 0;
+		let currentPage = Session.get("ClassroomListPagedPageNo") || 0;
 		return (
 			<nav key="pager" aria-label="...">
 				<ul className="pager">
@@ -337,7 +337,7 @@ export class CustomersPageView extends Component {
 						&nbsp;
 					</li>
 					: null}
-					{currentPage < this.props.data.customer_list_paged_page_count - 1 ?
+					{currentPage < this.props.data.classroom_list_paged_page_count - 1 ?
 								<li>
 									&nbsp;
 									<a href="#" onClick={this.onNextPage}>
@@ -351,7 +351,7 @@ export class CustomersPageView extends Component {
 	}
 
 	renderData() {
-		let viewStyle = Session.get("CustomersPageViewStyle") || "table";
+		let viewStyle = Session.get("ClassroomsPageViewStyle") || "table";
 		switch(viewStyle) {
 			case "table": return this.renderTable(); break;
 			case "blog": return this.renderBlog(); break;
@@ -364,7 +364,7 @@ export class CustomersPageView extends Component {
 
 
 	insertButtonClass() {
-		return Customers.userCanInsert(Meteor.userId(), {}) ? "" : "hidden";
+		return Classrooms.userCanInsert(Meteor.userId(), {}) ? "" : "hidden";
 	}
 
 	
@@ -373,11 +373,11 @@ export class CustomersPageView extends Component {
 
 	render() {
 		return (
-			<div id="customers-page-view" className="">
+			<div id="classrooms-page-view" className="">
 				<h2 id="component-title">
 					<span id="component-title-icon" className="">
 					</span>
-					Customers
+					Classrooms
 				</h2>
 				<div id="controls-row" className="row">
 					<div className="col-md-12">
@@ -395,7 +395,7 @@ export class CustomersPageView extends Component {
 			this.noData() ? null : (
 									<div>
 										<div id="dataview-controls-search-group" className="input-group">
-											<input type="text" className="form-control" id="dataview-search-input" placeholder="Search" name="search" defaultValue={Session.get("CustomerListPagedSearchString")} onKeyDown={this.onSearchKeyDown} autoFocus={true} />
+											<input type="text" className="form-control" id="dataview-search-input" placeholder="Search" name="search" defaultValue={Session.get("ClassroomListPagedSearchString")} onKeyDown={this.onSearchKeyDown} autoFocus={true} />
 											<span className="input-group-btn">
 												<button type="submit" id="dataview-search-button" className="btn btn-primary" onClick={this.onSearch}>
 													<span className="fa fa-search">
@@ -445,18 +445,18 @@ export class CustomersPageView extends Component {
 				</div>
 				{this.isNotEmpty() ? [this.renderData(), this.renderPager()] : (this.isNotFound() ?
 				<div className="alert alert-warning">
-					{"\"" + Session.get("CustomerListPagedSearchString") + "\" not found."}
+					{"\"" + Session.get("ClassroomListPagedSearchString") + "\" not found."}
 				</div>
 				:
 				<div className="alert alert-info">
-					No customers :(
+					No classrooms :(
 				</div>
 				)}
 			</div>
 		);
 	}
 }
-export class CustomersPageViewTableItems extends Component {
+export class ClassroomsPageViewTableItems extends Component {
 	constructor() {
 		super();
 		this.onToggle = this.onToggle.bind(this);
@@ -475,7 +475,7 @@ export class CustomersPageViewTableItems extends Component {
 		let data = {};
 		data[toggleField] = !this.props.data[toggleField];
 
-		Meteor.call("customersUpdate", itemId, data, function(err, res) {
+		Meteor.call("classroomsUpdate", itemId, data, function(err, res) {
 			if(err) {
 				alert(err);
 			}
@@ -486,7 +486,7 @@ export class CustomersPageViewTableItems extends Component {
 		e.stopPropagation();
 		let self = this;
 		let itemId = this.props.data._id;
-		FlowRouter.go("customers.edit", objectUtils.mergeObjects(FlowRouter.current().params, {customerId: this.props.data._id}));
+		FlowRouter.go("classrooms.edit", objectUtils.mergeObjects(FlowRouter.current().params, {classroomId: this.props.data._id}));
 	}
 
 	onDelete(e) {
@@ -497,7 +497,7 @@ export class CustomersPageViewTableItems extends Component {
 			message: "Delete? Are you sure?",
 			title: "Delete",
 			onYes: function(id) {
-				Meteor.call("customersRemove", id, function(err, res) {
+				Meteor.call("classroomsRemove", id, function(err, res) {
 					if(err) {
 						alert(err);
 					}
@@ -520,15 +520,15 @@ export class CustomersPageViewTableItems extends Component {
 		let itemId = item ? item._id : null;
 
 		
-		FlowRouter.go("customers.details", objectUtils.mergeObjects(FlowRouter.current().params, {customerId: this.props.data._id}));
+		FlowRouter.go("classrooms.details", objectUtils.mergeObjects(FlowRouter.current().params, {classroomId: this.props.data._id}));
 	}
 
 	editButtonClass() {
-		return Customers.userCanUpdate(Meteor.userId(), this.props.data) ? "" : "hidden";
+		return Classrooms.userCanUpdate(Meteor.userId(), this.props.data) ? "" : "hidden";
 	}
 
 	deleteButtonClass() {
-		return Customers.userCanRemove(Meteor.userId(), this.props.data) ? "" : "hidden";
+		return Classrooms.userCanRemove(Meteor.userId(), this.props.data) ? "" : "hidden";
 	}
 
 	

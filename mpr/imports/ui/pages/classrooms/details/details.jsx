@@ -4,14 +4,14 @@ import { withTracker, createContainer } from "meteor/react-meteor-data";
 import {pathFor, menuItemClass} from "/imports/modules/client/router_utils";
 import {Loading} from "/imports/ui/pages/loading/loading.jsx";
 import {mergeObjects} from "/imports/modules/both/object_utils";
-import {Customers} from "/imports/api/collections/both/customers.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 import * as formUtils from "/imports/modules/client/form_utils";
 import * as objectUtils from "/imports/modules/both/object_utils";
 import * as dateUtils from "/imports/modules/both/date_utils";
 import * as stringUtils from "/imports/modules/both/string_utils";
 
 
-export class CustomersInsertPage extends Component {
+export class ClassroomsDetailsPage extends Component {
 	constructor () {
 		super();
 		
@@ -50,7 +50,7 @@ export class CustomersInsertPage extends Component {
 							<div className="col-md-12">
 							</div>
 						</div>
-						<CustomersInsertPageInsertForm data={this.props.data} routeParams={this.props.routeParams} />
+						<ClassroomsDetailsPageDetailsForm data={this.props.data} routeParams={this.props.routeParams} />
 					</div>
 				</div>
 			);
@@ -58,7 +58,7 @@ export class CustomersInsertPage extends Component {
 	}
 }
 
-export const CustomersInsertPageContainer = withTracker(function(props) {
+export const ClassroomsDetailsPageContainer = withTracker(function(props) {
 
 
 
@@ -66,7 +66,7 @@ export const CustomersInsertPageContainer = withTracker(function(props) {
 		
 
 		let subs = [
-			Meteor.subscribe("customers_empty")
+			Meteor.subscribe("classroom_details", props.routeParams.classroomId)
 		];
 		let ready = true;
 		_.each(subs, function(sub) {
@@ -83,7 +83,7 @@ export const CustomersInsertPageContainer = withTracker(function(props) {
 
 		data = {
 
-				customers_empty: Customers.findOne({_id:null}, {})
+				classroom_details: Classrooms.findOne({_id:props.routeParams.classroomId}, {})
 			};
 		
 
@@ -91,15 +91,15 @@ export const CustomersInsertPageContainer = withTracker(function(props) {
 	}
 	return { data: data };
 
-})(CustomersInsertPage);
+})(ClassroomsDetailsPage);
 
-export class CustomersInsertPageInsertForm extends Component {
+export class ClassroomsDetailsPageDetailsForm extends Component {
 	constructor () {
 		super();
 
 		this.state = {
-			customersInsertPageInsertFormErrorMessage: "",
-			customersInsertPageInsertFormInfoMessage: ""
+			classroomsDetailsPageDetailsFormErrorMessage: "",
+			classroomsDetailsPageDetailsFormInfoMessage: ""
 		};
 
 		this.renderErrorMessage = this.renderErrorMessage.bind(this);
@@ -130,7 +130,7 @@ export class CustomersInsertPageInsertForm extends Component {
 	renderErrorMessage() {
 		return(
 			<div className="alert alert-warning">
-				{this.state.customersInsertPageInsertFormErrorMessage}
+				{this.state.classroomsDetailsPageDetailsFormErrorMessage}
 			</div>
 		);
 	}
@@ -138,41 +138,41 @@ export class CustomersInsertPageInsertForm extends Component {
 	renderInfoMessage() {
 		return(
 			<div className="alert alert-success">
-				{this.state.customersInsertPageInsertFormInfoMessage}
+				{this.state.classroomsDetailsPageDetailsFormInfoMessage}
 			</div>
 		);
 	}
 
 	onSubmit(e) {
 		e.preventDefault();
-		this.setState({ customersInsertPageInsertFormInfoMessage: "" });
-		this.setState({ customersInsertPageInsertFormErrorMessage: "" });
+		this.setState({ classroomsDetailsPageDetailsFormInfoMessage: "" });
+		this.setState({ classroomsDetailsPageDetailsFormErrorMessage: "" });
 
 		var self = this;
 		var $form = $(e.target);
 
 		function submitAction(result, msg) {
-			var customersInsertPageInsertFormMode = "insert";
-			if(!$("#customers-insert-page-insert-form").find("#form-cancel-button").length) {
-				switch(customersInsertPageInsertFormMode) {
+			var classroomsDetailsPageDetailsFormMode = "read_only";
+			if(!$("#classrooms-details-page-details-form").find("#form-cancel-button").length) {
+				switch(classroomsDetailsPageDetailsFormMode) {
 					case "insert": {
 						$form[0].reset();
 					}; break;
 
 					case "update": {
 						var message = msg || "Saved.";
-						self.setState({ customersInsertPageInsertFormInfoMessage: message });
+						self.setState({ classroomsDetailsPageDetailsFormInfoMessage: message });
 					}; break;
 				}
 			}
 
-			FlowRouter.go("customers", objectUtils.mergeObjects(FlowRouter.current().params, {}));
+			/*SUBMIT_REDIRECT*/
 		}
 
 		function errorAction(msg) {
 			msg = msg || "";
 			var message = msg.message || msg || "Error.";
-			self.setState({ customersInsertPageInsertFormErrorMessage: message });
+			self.setState({ classroomsDetailsPageDetailsFormErrorMessage: message });
 		}
 
 		formUtils.validateForm(
@@ -186,7 +186,7 @@ export class CustomersInsertPageInsertForm extends Component {
 			function(values) {
 				
 
-				Meteor.call("customersInsert", values, function(e, r) { if(e) errorAction(e); else submitAction(r); });
+				
 			}
 		);
 
@@ -198,21 +198,21 @@ export class CustomersInsertPageInsertForm extends Component {
 		self = this;
 		
 
-		FlowRouter.go("customers", objectUtils.mergeObjects(FlowRouter.current().params, {}));
+		/*CANCEL_REDIRECT*/
 	}
 
 	onClose(e) {
 		e.preventDefault();
 		self = this;
 
-		/*CLOSE_REDIRECT*/
+		FlowRouter.go("classrooms", objectUtils.mergeObjects(FlowRouter.current().params, {}));
 	}
 
 	onBack(e) {
 		e.preventDefault();
 		self = this;
 
-		/*BACK_REDIRECT*/
+		FlowRouter.go("classrooms", objectUtils.mergeObjects(FlowRouter.current().params, {}));
 	}
 
 	
@@ -222,23 +222,30 @@ export class CustomersInsertPageInsertForm extends Component {
 	render() {
 		let self = this;
 		return (
-			<div id="customers-insert-page-insert-form" className="">
+			<div id="classrooms-details-page-details-form" className="">
 				<h2 id="component-title">
+					<span id="form-back-button">
+						<a href="#" className="btn btn-default" title="back" onClick={this.onBack}>
+							<span className="fa fa-chevron-left">
+							</span>
+						</a>
+						&nbsp;
+					</span>
 					<span id="component-title-icon" className="">
 					</span>
-					New customer
+					Details
 				</h2>
 				<form role="form" onSubmit={this.onSubmit}>
-					{this.state.customersInsertPageInsertFormErrorMessage ? this.renderErrorMessage() : null}
-					{this.state.customersInsertPageInsertFormInfoMessage ? this.renderInfoMessage() : null}
+					{this.state.classroomsDetailsPageDetailsFormErrorMessage ? this.renderErrorMessage() : null}
+					{this.state.classroomsDetailsPageDetailsFormInfoMessage ? this.renderInfoMessage() : null}
 								<div className="form-group  field-name">
 									<label htmlFor="name">
 										Name
 									</label>
 									<div className="input-div">
-										<input type="text" name="name" defaultValue="" className="form-control " autoFocus="autoFocus" required="required" />
-										<span id="help-text" className="help-block" />
-										<span id="error-text" className="help-block" />
+										<p className="form-control-static  control-field-name">
+											{this.props.data.classroom_details.name}
+										</p>
 									</div>
 								</div>
 										<div className="form-group  field-phone">
@@ -246,9 +253,9 @@ export class CustomersInsertPageInsertForm extends Component {
 							Phone
 						</label>
 						<div className="input-div">
-							<input type="text" name="phone" defaultValue="-" className="form-control " />
-							<span id="help-text" className="help-block" />
-							<span id="error-text" className="help-block" />
+							<p className="form-control-static  control-field-phone">
+								{this.props.data.classroom_details.phone}
+							</p>
 						</div>
 					</div>
 					<div className="form-group  field-email">
@@ -256,9 +263,9 @@ export class CustomersInsertPageInsertForm extends Component {
 							E-mail
 						</label>
 						<div className="input-div">
-							<input type="text" name="email" defaultValue="" className="form-control " data-type="email" />
-							<span id="help-text" className="help-block" />
-							<span id="error-text" className="help-block" />
+							<p className="form-control-static  control-field-email">
+								{this.props.data.classroom_details.email}
+							</p>
 						</div>
 					</div>
 					<div className="form-group  field-note">
@@ -266,19 +273,26 @@ export class CustomersInsertPageInsertForm extends Component {
 							Note
 						</label>
 						<div className="input-div">
-							<textarea className="form-control " name="note" defaultValue="" />
-							<span id="help-text" className="help-block" />
-							<span id="error-text" className="help-block" />
+							<p className="form-control-static  control-field-note">
+								{this.props.data.classroom_details.note}
+							</p>
+						</div>
+					</div>
+					<div className="form-group  field-invoiced">
+						<label htmlFor="invoiced">
+							Invoiced
+						</label>
+						<div className="input-div">
+							<p className="form-control-static  control-field-invoiced">
+								{this.props.data.classroom_details.invoiced}
+							</p>
 						</div>
 					</div>
 					<div className="form-group">
 						<div className="submit-div btn-toolbar">
-							<a href="#" id="form-cancel-button" className="btn btn-default" onClick={this.onCancel}>
-								Cancel
+							<a href="#" id="form-close-button" className="btn btn-primary" onClick={this.onClose}>
+								OK
 							</a>
-							<button id="form-submit-button" className="btn btn-success" type="submit">
-								Save
-							</button>
 						</div>
 					</div>
 				</form>

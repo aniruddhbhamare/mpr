@@ -1,6 +1,6 @@
 import {Invoices} from "/imports/api/collections/both/invoices.js";
-import {Customers} from "/imports/api/collections/both/customers.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 
 // Invoices
-Invoices.join(Customers, "customerId", "customer", ["name"]);
+Invoices.join(Classrooms, "classroomId", "classroom", ["name"]);
 

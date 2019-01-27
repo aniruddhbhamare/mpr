@@ -1,7 +1,6 @@
 {
 	"application": {
-		"title": "MPR v0.0.2",
-
+		"title": "MPR v0.0.1",
 		"theme": "bootswatch-united",
 
 		"collections": [

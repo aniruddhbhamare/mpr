@@ -4,7 +4,7 @@ import { withTracker, createContainer } from "meteor/react-meteor-data";
 import {pathFor, menuItemClass} from "/imports/modules/client/router_utils";
 import {Loading} from "/imports/ui/pages/loading/loading.jsx";
 import {mergeObjects} from "/imports/modules/both/object_utils";
-import {Customers} from "/imports/api/collections/both/customers.js";
+import {Classrooms} from "/imports/api/collections/both/classrooms.js";
 import {Invoices} from "/imports/api/collections/both/invoices.js";
 import * as formUtils from "/imports/modules/client/form_utils";
 import * as objectUtils from "/imports/modules/both/object_utils";
@@ -67,7 +67,7 @@ export const InvoicesEditPageContainer = withTracker(function(props) {
 		
 
 		let subs = [
-			Meteor.subscribe("customer_list"),
+			Meteor.subscribe("classroom_list"),
 			Meteor.subscribe("invoice_details", props.routeParams.invoiceId)
 		];
 		let ready = true;
@@ -85,7 +85,7 @@ export const InvoicesEditPageContainer = withTracker(function(props) {
 
 		data = {
 
-				customer_list: Customers.find({}, {sort:{name:1}}).fetch(),
+				classroom_list: Classrooms.find({}, {sort:{name:1}}).fetch(),
 				invoice_details: Invoices.findOne({_id:props.routeParams.invoiceId}, {})
 			};
 		
@@ -259,13 +259,13 @@ export class InvoicesEditPageEditForm extends Component {
 							<span id="error-text" className="help-block" />
 						</div>
 					</div>
-					<div className="form-group  field-customer-id">
-						<label htmlFor="customerId">
-							Customer
+					<div className="form-group  field-classroom-id">
+						<label htmlFor="classroomId">
+							Classroom
 						</label>
 						<div className="input-div">
-							<select className="form-control " name="customerId" defaultValue={this.props.data.invoice_details.customerId} required="required">
-								{this.props.data.customer_list.map(function(item, index) { return(
+							<select className="form-control " name="classroomId" defaultValue={this.props.data.invoice_details.classroomId} required="required">
+								{this.props.data.classroom_list.map(function(item, index) { return(
 								<option key={"dynamic-" + index} value={item._id}>									{item.name}</option>
 								); }) }
 							</select>
