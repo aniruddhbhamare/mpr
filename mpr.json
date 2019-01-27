@@ -1,6 +1,6 @@
 {
 	"application": {
-		"title": "MPR v0.0.1",
+		"title": "MPR v0.0.2",
 		"theme": "bootswatch-united",
 
 		"collections": [
@@ -11,7 +11,7 @@
 					{ "name": "phone", "title": "Phone", "default": "-", "exportable": true },
 					{ "name": "email", "title": "E-mail", "type": "email", "exportable": true },
 					{ "name": "note", "title": "Note", "input": "textarea", "exportable": true, "show_in_dataview": false },
-					{ "name": "invoiced", "title": "Invoiced", "type": "float", "show_in_insert_form": false, "show_in_update_form": false, "exportable": true }
+					{ "name": "studentd", "title": "Invoiced", "type": "float", "show_in_insert_form": false, "show_in_update_form": false, "exportable": true }
 				],
 				"owner_field": "ownerId",
 
@@ -19,13 +19,13 @@
 				"roles_allowed_to_update": ["owner"],
 				"roles_allowed_to_delete": ["owner"],
 
-				"before_insert_code": "if(!doc.invoiced) doc.invoiced = 0;"
+				"before_insert_code": "if(!doc.studentd) doc.studentd = 0;"
 			},
 
 			{
-				"name": "invoices",
+				"name": "students",
 				"fields": [
-					{ "name": "invoiceNumber", "title": "Invoice number", "default": "", "required": true, "exportable": true },
+					{ "name": "studentNumber", "title": "Invoice number", "default": "", "required": true, "exportable": true },
 					{ "name": "date", "title": "Invoice date", "type": "date", "format": "MM-DD-YYYY", "input": "datepicker", "default": "today", "required": true, "exportable": true },
 
 					{
@@ -70,13 +70,13 @@
 
 				"before_insert_code": "if(!doc.totalAmount) doc.totalAmount = 0;",
 
-				"after_insert_code": "var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { invoiced: sum }});",
-				"after_update_code": "var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { invoiced: sum }});",
-				"after_remove_code": "var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { invoiced: sum }});"
+				"after_insert_code": "var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { studentd: sum }});",
+				"after_update_code": "var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { studentd: sum }});",
+				"after_remove_code": "var sum = 0; Invoices.find({ classroomId: doc.classroomId }).map(function(item) { sum += item.totalAmount; }); Classrooms.update({ _id: doc.classroomId }, { $set: { studentd: sum }});"
 			},
 
 			{
-				"name": "invoice_items",
+				"name": "student_items",
 				"fields": [
 					{ "name": "description", "title": "Description", "required": true, "exportable": true },
 					{ "name": "quantity", "title": "Quantity", "type": "float", "default": 1, "required": true, "exportable": true },
@@ -93,11 +93,11 @@
 
 				"before_update_code": "if(!modifier.$set) return; var quantity = modifier.$set.quantity || doc.quantity; var price = modifier.$set.price || doc.price; modifier.$set.amount = quantity * price;",
 
-				"after_insert_code": "var sum = 0; InvoiceItems.find({ invoiceId: doc.invoiceId }).map(function(item) { sum += item.amount; }); Invoices.update({ _id: doc.invoiceId }, { $set: { totalAmount: sum }});",
+				"after_insert_code": "var sum = 0; InvoiceItems.find({ studentId: doc.studentId }).map(function(item) { sum += item.amount; }); Invoices.update({ _id: doc.studentId }, { $set: { totalAmount: sum }});",
 
-				"after_update_code": "var sum = 0; InvoiceItems.find({ invoiceId: doc.invoiceId }).map(function(item) { sum += item.amount; }); Invoices.update({ _id: doc.invoiceId }, { $set: { totalAmount: sum }});",
+				"after_update_code": "var sum = 0; InvoiceItems.find({ studentId: doc.studentId }).map(function(item) { sum += item.amount; }); Invoices.update({ _id: doc.studentId }, { $set: { totalAmount: sum }});",
 
-				"after_remove_code": "var sum = 0; InvoiceItems.find({ invoiceId: doc.invoiceId }).map(function(item) { sum += item.amount; }); Invoices.update({ _id: doc.invoiceId }, { $set: { totalAmount: sum }});"
+				"after_remove_code": "var sum = 0; InvoiceItems.find({ studentId: doc.studentId }).map(function(item) { sum += item.amount; }); Invoices.update({ _id: doc.studentId }, { $set: { totalAmount: sum }});"
 			}
 		],
 
@@ -122,38 +122,38 @@
 				"options": "{}"
 			},
 			{
-				"name": "invoice_list",
-				"collection": "invoices",
+				"name": "student_list",
+				"collection": "students",
 				"filter": {},
-				"options": "{ \"sort\": { \"invoiceNumber\": -1 } }"
+				"options": "{ \"sort\": { \"studentNumber\": -1 } }"
 			},
 			{
-				"name": "invoices_empty",
-				"collection": "invoices",
+				"name": "students_empty",
+				"collection": "students",
 				"filter": "{ \"_id\": null }",
 				"options": "{}",
 				"find_one": true
 			},
 			{
-				"name": "invoice_details",
-				"collection": "invoices",
-				"filter": "{ \"_id\": \":invoiceId\" }",
+				"name": "student_details",
+				"collection": "students",
+				"filter": "{ \"_id\": \":studentId\" }",
 				"find_one": true
 			},
 			{
-				"name": "invoice_items",
-				"collection": "invoice_items",
-				"filter": "{ \"invoiceId\": \":invoiceId\" }"
+				"name": "student_items",
+				"collection": "student_items",
+				"filter": "{ \"studentId\": \":studentId\" }"
 			},
 			{
-				"name": "invoice_items_empty",
-				"collection": "invoice_items",
+				"name": "student_items_empty",
+				"collection": "student_items",
 				"filter": "{ \"_id\": null }",
 				"find_one": true
 			},
 			{
-				"name": "invoice_item",
-				"collection": "invoice_items",
+				"name": "student_item",
+				"collection": "student_items",
 				"filter": "{ \"_id\": \":itemId\" }",
 				"find_one": true
 			},
@@ -175,7 +175,7 @@
 							"name": "home_jumbotron",
 							"title": "Montessori Progress Report",
 							"type": "jumbotron",
-							"text": "<b>This <a href=\"https://www.meteor.com\" target=\"_blank\">Meteor</a> application is made with <a href=\"http://www.meteorkitchen.com\" target=\"_blank\">meteor-kitchen</a> without manual coding.</b><br />It shows how to work with DataViews, Forms with dates and lookup fields, master-detail relations etc.<br />Source code (input file for generator) is <a href=\"https://github.com/perak/kitchen-examples/tree/master/example-invoices\" target=\"_blank\">here</a>.",
+							"text": "<b>This <a href=\"https://www.meteor.com\" target=\"_blank\">Meteor</a> application is made with <a href=\"http://www.meteorkitchen.com\" target=\"_blank\">meteor-kitchen</a> without manual coding.</b><br />It shows how to work with DataViews, Forms with dates and lookup fields, master-detail relations etc.<br />Source code (input file for generator) is <a href=\"https://github.com/perak/kitchen-examples/tree/master/example-students\" target=\"_blank\">here</a>.",
 							"button_title": "Continue &raquo;",
 							"button_route": "login"
 						}
@@ -291,23 +291,23 @@
 				},
 
 				{
-					"name": "invoices",
+					"name": "students",
 					"components": [
 						{
 							"name": "view",
 							"type": "data_view",
 							"title": "Invoices",
-							"text_if_empty": "No invoices :(",
-							"query_name": "invoice_list",
+							"text_if_empty": "No students :(",
+							"query_name": "student_list",
 							"page_size": 20,
-							"insert_route": "invoices.insert",
-							"edit_route": "invoices.edit",
+							"insert_route": "students.insert",
+							"edit_route": "students.edit",
 							"edit_route_params": [
-								{ "name": "invoiceId", "value": "this._id" }
+								{ "name": "studentId", "value": "this._id" }
 							],
-							"details_route": "invoices.details",
+							"details_route": "students.details",
 							"details_route_params": [
-								{ "name": "invoiceId", "value": "this._id" }
+								{ "name": "studentId", "value": "this._id" }
 							]
 						}
 					],
@@ -320,22 +320,22 @@
 									"name": "insert_form",
 									"type": "form",
 									"mode": "insert",
-									"title": "New invoice",
+									"title": "New student",
 
-									"query_name": "invoices_empty",
+									"query_name": "students_empty",
 
-									"submit_route": "invoices.details",
+									"submit_route": "students.details",
 									"submit_route_params": [
-										{ "name": "invoiceId", "value": "result"}
+										{ "name": "studentId", "value": "result"}
 									],
-									"cancel_route": "invoices"
+									"cancel_route": "students"
 								}
 							]
 						},
 						{
 							"name": "details",
 							"template": "page_subcontent_tabnav",
-							"route_params": ["invoiceId"],
+							"route_params": ["studentId"],
 							"components": [
 								{
 									"name": "details_form",
@@ -343,8 +343,8 @@
 									"mode": "read_only",
 									"title": "Invoice details",
 									"layout": "horizontal",
-									"query_name": "invoice_details",
-									"back_route": "invoices"
+									"query_name": "student_details",
+									"back_route": "students"
 								}
 
 							],
@@ -358,16 +358,16 @@
 											"name": "view",
 											"type": "data_view",
 											"text_if_empty": "No items",
-											"query_name": "invoice_items",
+											"query_name": "student_items",
 											"page_size": 20,
 											"insert_button_title": "Add item",
-											"insert_route": "invoices.details.insert",
+											"insert_route": "students.details.insert",
 											"insert_route_params": [
-												{ "name": "invoiceId", "value": "this.params.invoiceId" }
+												{ "name": "studentId", "value": "this.params.studentId" }
 											],
-											"edit_route": "invoices.details.edit",
+											"edit_route": "students.details.edit",
 											"edit_route_params": [
-												{ "name": "invoiceId", "value": "UI._parentData(1).params.invoiceId" },
+												{ "name": "studentId", "value": "UI._parentData(1).params.studentId" },
 												{ "name": "itemId", "value": "this._id" }
 											]
 										}
@@ -382,19 +382,19 @@
 											"type": "form",
 											"mode": "insert",
 											"title": "Add item",
-											"query_name": "invoice_items_empty",
+											"query_name": "student_items_empty",
 
 											"hidden_fields": [
-												{ "name": "invoiceId", "value": "this.params.invoiceId" }
+												{ "name": "studentId", "value": "this.params.studentId" }
 											],
 
-											"submit_route": "invoices.details",
+											"submit_route": "students.details",
 											"submit_route_params": [
-												{ "name": "invoiceId", "value": "this.params.invoiceId"}
+												{ "name": "studentId", "value": "this.params.studentId"}
 											],
-											"cancel_route": "invoices.details",
+											"cancel_route": "students.details",
 											"cancel_route_params": [
-												{ "name": "invoiceId", "value": "this.params.invoiceId"}
+												{ "name": "studentId", "value": "this.params.studentId"}
 											]
 										}
 									]
@@ -409,14 +409,14 @@
 											"type": "form",
 											"mode": "update",
 											"title": "Edit item",
-											"query_name": "invoice_item",
-											"submit_route": "invoices.details",
+											"query_name": "student_item",
+											"submit_route": "students.details",
 											"submit_route_params": [
-												{ "name": "invoiceId", "value": "this.params.invoiceId"}
+												{ "name": "studentId", "value": "this.params.studentId"}
 											],
-											"cancel_route": "invoices.details",
+											"cancel_route": "students.details",
 											"cancel_route_params": [
-												{ "name": "invoiceId", "value": "this.params.invoiceId"}
+												{ "name": "studentId", "value": "this.params.studentId"}
 											]
 										}
 									]
@@ -426,16 +426,16 @@
 
 						{
 							"name": "edit",
-							"route_params": ["invoiceId"],
+							"route_params": ["studentId"],
 							"components": [
 								{
 									"name": "edit_form",
 									"type": "form",
 									"mode": "update",
-									"title": "Edit invoice",
-									"submit_route": "invoices",
-									"cancel_route": "invoices",
-									"query_name": "invoice_details"
+									"title": "Edit student",
+									"submit_route": "students",
+									"cancel_route": "students",
+									"query_name": "student_details"
 								}
 							]
 						}
@@ -493,7 +493,7 @@
 					"dest_selector": "#menu",
 					"items": [
 						{ "title": "Home", "route": "home_private" },
-						{ "title": "Invoices", "route": "invoices" },
+						{ "title": "Invoices", "route": "students" },
 						{ "title": "Classrooms", "route": "classrooms" }
 					]
 				},
