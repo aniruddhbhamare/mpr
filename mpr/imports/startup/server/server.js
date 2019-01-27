@@ -37,7 +37,7 @@ Meteor.startup(function() {
 
 	// Email templates config
 	if(Accounts.emailTemplates) {
-		Accounts.emailTemplates.siteName = "Montessori Progress Report";
+		Accounts.emailTemplates.siteName = "Montessori Progress Report v0.0.1";
 		Accounts.emailTemplates.from = "";
 	}
 

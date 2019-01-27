@@ -93,7 +93,7 @@ export class PublicLayout extends Component {
 										</span>
 									</button>
 									<a className="navbar-brand" href="/">
-										Montessori Progress Report
+										Montessori Progress Report v0.0.1
 									</a>
 								</div>
 								<div id="menu" className="collapse navbar-collapse">
@@ -278,7 +278,7 @@ export class PrivateLayout extends Component {
 										</span>
 									</button>
 									<a className="navbar-brand" href="/">
-										Montessori Progress Report
+										Montessori Progress Report v0.0.1
 									</a>
 								</div>
 								<div id="menu" className="collapse navbar-collapse">
